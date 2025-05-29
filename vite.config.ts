@@ -22,9 +22,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       proxy: {
-        '/api':
-          env.VITE_REST_API_URL ||
-          'http://ec2-34-201-46-215.compute-1.amazonaws.com',
+        '/api': env.VITE_REST_API_URL || 'https://uitestapi.occupass.com',
       },
     },
   };

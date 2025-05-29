@@ -1,27 +1,31 @@
-import { createFileRoute } from '@tanstack/react-router';
-
-import { fetchCustomers } from '~/utils/api';
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { TruckIcon, UsersIcon } from 'lucide-react';
+import { Card, CardContent } from '~/components/ui/card';
 
 export const Route = createFileRoute('/')({
-  component: Index,
-  loader: async () => fetchCustomers(),
-  errorComponent: () => <div>Error loading Index route</div>,
+  component: RouteComponent,
 });
 
-function Index() {
-  const customers = Route.useLoaderData();
-
+function RouteComponent() {
   return (
-    <div className="p-2">
-      <h3>Welcome Home! {import.meta.env.VITE_BASE_API_URL}</h3>
-      <h4>Customers:</h4>
-      <ul>
-        {customers?.results?.map((customer) => (
-          <li key={customer.id}>
-            {customer.companyName} {customer.city}
-          </li>
-        ))}
-      </ul>
+    <div className="grid grid-cols-2 gap-2 md:flex md:gap-4">
+      <Link to="/customers">
+        <Card className="md:w-[150px]">
+          <CardContent className="flex flex-col items-center justify-center p-4">
+            <UsersIcon className="w-8 h-8 mb-2" />
+            <h3 className="text-lg font-semibold">Customers</h3>
+          </CardContent>
+        </Card>
+      </Link>
+
+      <Link to="/orders">
+        <Card className="shrink-0 md:w-[150px]">
+          <CardContent className="flex flex-col items-center justify-center p-4">
+            <TruckIcon className="w-8 h-8 mb-2" />
+            <h3 className="text-lg font-semibold">Orders</h3>
+          </CardContent>
+        </Card>
+      </Link>
     </div>
   );
 }
