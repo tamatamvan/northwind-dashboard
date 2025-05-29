@@ -1,5 +1,5 @@
 import { JsonServiceClient } from '@servicestack/client';
-import { GetCustomerDetails, QueryCustomers } from '~/dtos';
+import { GetCustomerDetails, QueryCustomers, QueryOrders } from '~/dtos';
 
 const client = new JsonServiceClient(
   import.meta.env.VITE_BASE_API_URL || '/api'
@@ -37,6 +37,39 @@ export const fetchCustomerDetails = async (id: string) => {
   throw new Error(
     customerDetails.errorMessage || 'Failed to fetch customer details'
   );
+};
+
+export type FetchOrdersParams = {
+  page?: number; // Page number for pagination
+  take?: number; // Number of orders to fetch per page
+  orderBy?: string; // Optional field to order by
+  orderByDesc?: string; // Optional field to order by descending
+};
+
+export const fetchOrders = async ({
+  page = 1,
+  take = 10,
+  orderBy,
+  orderByDesc,
+}: FetchOrdersParams) => {
+  // Fetch all orders with pagination
+  const queryOrders = new QueryOrders({});
+  queryOrders.take = take;
+  queryOrders.skip = page ? (page - 1) * take : 0;
+  queryOrders.include = 'total';
+
+  if (orderBy) {
+    queryOrders.orderBy = orderBy; // Set the field to order by
+  }
+  if (orderByDesc) {
+    queryOrders.orderByDesc = orderByDesc; // Set the field to order by descending
+  }
+
+  const orders = await client.api(queryOrders);
+  if (orders.succeeded) {
+    return orders.response;
+  }
+  throw new Error(orders.errorMessage || 'Failed to fetch orders');
 };
 
 export { client };

@@ -1,28 +1,22 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { z } from 'zod';
-
 import { CustomerCard } from '~/components/customers/customer-card';
 import { Pagination } from '~/components/pagination';
 
 import { fetchCustomers } from '~/lib/api';
-
-const customersSearchSchema = z.object({
-  page: z.coerce.number().min(1).default(1),
-  take: z.coerce.number().min(1).max(100).default(10),
-});
+import { searchSchema } from '~/lib/utils';
 
 // type CustomersSearchParams = z.infer<typeof customersSearchSchema>;
 
 export const Route = createFileRoute('/customers/')({
   component: Customers,
   loaderDeps: (opts) => {
-    const parsed = customersSearchSchema.parse(opts.search);
+    const parsed = searchSchema.parse(opts.search);
     return { page: parsed.page, take: parsed.take };
   },
   loader: async ({ deps }) => fetchCustomers(deps),
   errorComponent: () => <div>Error loading Customers page</div>,
-  validateSearch: customersSearchSchema,
+  validateSearch: searchSchema,
 });
 
 function Customers() {

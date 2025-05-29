@@ -1,4 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { OrdersTable } from '~/components/orders/orders-table';
+import { Order } from '~/dtos';
 import { fetchCustomerDetails } from '~/lib/api';
 
 export const Route = createFileRoute('/customers/$customerId')({
@@ -54,13 +56,9 @@ function RouteComponent() {
             No orders found for this customer.
           </div>
         ) : (
-          <ul className="list-disc pl-5">
-            {customerOrders?.map((order) => (
-              <li key={order.id} className="mb-2">
-                Order ID: {order.id}, Total: ${order.total}
-              </li>
-            ))}
-          </ul>
+          <OrdersTable
+            data={customerOrders?.map((co) => co.order) as Order[]}
+          />
         )}
       </div>
     </>
