@@ -14,7 +14,7 @@ const customersSearchSchema = z.object({
 
 // type CustomersSearchParams = z.infer<typeof customersSearchSchema>;
 
-export const Route = createFileRoute('/customers')({
+export const Route = createFileRoute('/customers/')({
   component: Customers,
   loaderDeps: (opts) => {
     const parsed = customersSearchSchema.parse(opts.search);

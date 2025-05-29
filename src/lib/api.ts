@@ -1,5 +1,5 @@
 import { JsonServiceClient } from '@servicestack/client';
-import { QueryCustomers } from '~/dtos';
+import { GetCustomerDetails, QueryCustomers } from '~/dtos';
 
 const client = new JsonServiceClient(
   import.meta.env.VITE_BASE_API_URL || '/api'
@@ -25,6 +25,18 @@ export const fetchCustomers = async ({
     return customers.response;
   }
   throw new Error(customers.errorMessage || 'Failed to fetch customers');
+};
+
+export const fetchCustomerDetails = async (id: string) => {
+  const getCustomerDetails = new GetCustomerDetails({});
+  getCustomerDetails.id = id;
+  const customerDetails = await client.api(getCustomerDetails);
+  if (customerDetails.succeeded) {
+    return customerDetails.response;
+  }
+  throw new Error(
+    customerDetails.errorMessage || 'Failed to fetch customer details'
+  );
 };
 
 export { client };
