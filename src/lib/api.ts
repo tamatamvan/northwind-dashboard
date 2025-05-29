@@ -14,7 +14,6 @@ export const fetchCustomers = async ({
   page = 1,
   take = 10,
 }: FetchCustomersParams) => {
-  console.log('Fetching customers with params:', { page, take });
   const queryCustomers = new QueryCustomers({});
   queryCustomers.take = take; // Limit the number of customers fetched
   queryCustomers.skip = page ? (page - 1) * take : 0; // Calculate offset based on page

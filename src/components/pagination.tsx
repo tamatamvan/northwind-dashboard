@@ -1,3 +1,5 @@
+import { Button } from './ui/button';
+
 export function Pagination({
   page,
   pageSize,
@@ -18,20 +20,20 @@ export function Pagination({
         <span className="font-bold">{totalPages}</span>
       </span>
       <div className="flex space-x-2">
-        <button
+        <Button
           disabled={page <= 1}
           onClick={() => onPageChange(page - 1)}
-          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          className="cursor-pointer"
         >
           Previous
-        </button>
-        <button
+        </Button>
+        <Button
           disabled={page >= totalPages}
           onClick={() => onPageChange(page + 1)}
-          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          className="cursor-pointer"
         >
           Next
-        </button>
+        </Button>
       </div>
     </div>
   );
