@@ -46,6 +46,10 @@ Other than the mentioned template above, this project also uses:
 - [zod](https://zod.dev) for schema validation
 - [@servicestack/client](https://docs.servicestack.net/typescript-server-events-client) for fetching data from the provided api service.
 
+## Dev Notes
+Due to the lack of `orderDetails` from the response returned by `QueryOrders` operation, the order detail page is utilizing the `GetOrders` operation instead.
+The `customerId` is required to filtered and minimized the response, then the list of orders are filtered (using `.find` method) to pick the order details data to be displayed on the page.
+
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
