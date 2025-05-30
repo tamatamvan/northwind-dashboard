@@ -25,10 +25,11 @@ export const fetchCustomers = async ({
   orderBy,
   orderByDesc,
 }: FetchCustomersParams) => {
-  const queryCustomers = new QueryCustomers({});
-  queryCustomers.take = take; // Limit the number of customers fetched
-  queryCustomers.skip = page ? (page - 1) * take : 0; // Calculate offset based on page
-  queryCustomers.include = 'total';
+  const queryCustomers = new QueryCustomers({
+    include: 'total', // Include total count in the response
+    take: take,
+    skip: page ? (page - 1) * take : 0, // Calculate offset based on page
+  });
 
   if (country) {
     queryCustomers.countryStartsWith = country; // Filter customers by country
@@ -51,8 +52,10 @@ export const fetchCustomers = async ({
 };
 
 export const fetchCustomerDetails = async (id: string) => {
-  const getCustomerDetails = new GetCustomerDetails({});
-  getCustomerDetails.id = id;
+  const getCustomerDetails = new GetCustomerDetails({
+    id,
+  });
+
   const customerDetails = await client.api(getCustomerDetails);
   if (customerDetails.succeeded) {
     return customerDetails.response;
@@ -76,10 +79,11 @@ export const fetchOrders = async ({
   orderByDesc,
 }: FetchOrdersParams) => {
   // Fetch all orders with pagination
-  const queryOrders = new QueryOrders({});
-  queryOrders.take = take;
-  queryOrders.skip = page ? (page - 1) * take : 0;
-  queryOrders.include = 'total';
+  const queryOrders = new QueryOrders({
+    take,
+    skip: page ? (page - 1) * take : 0, // Calculate offset based on page
+    include: 'total', // Include total count in the response
+  });
 
   if (orderBy) {
     queryOrders.orderBy = orderBy; // Set the field to order by
@@ -102,8 +106,9 @@ export const fetchOrderDetails = async ({
   customerId: string;
   orderId: string;
 }) => {
-  const getOrdersDetails = new GetOrders({});
-  getOrdersDetails.customerId = customerId;
+  const getOrdersDetails = new GetOrders({
+    customerId: customerId,
+  });
 
   const orderDetails = await client.api(getOrdersDetails);
 

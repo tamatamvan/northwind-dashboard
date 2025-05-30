@@ -21,7 +21,7 @@ export function CustomerCard({ customer }: CustomerCardProps) {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex flex-col space-y-2">
+      <CardContent className="flex flex-col flex-grow space-y-2">
         <div className="font-semibold">Address:</div>
         <div className="text-sm text-gray-600">
           {customer.address}, {customer.city}, {customer.region}
