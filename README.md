@@ -4,7 +4,7 @@ A simple UI implementation built using React and TypeScript for accessing Custom
 
 ## Demo
 
-This project is deployed to Netlify, and can be accessed at: https://northwind-tama.netlify.com
+This project is deployed to Netlify, and can be accessed at: https://northwind-tama.netlify.app
 
 ## Setup and Run Project Locally
 
