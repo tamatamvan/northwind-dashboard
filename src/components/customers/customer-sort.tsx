@@ -13,6 +13,7 @@ interface CustomerSortProps {
 }
 
 const sortableFields = [
+  { label: 'Customer ID', value: 'id' },
   { label: 'Company Name', value: 'companyName' },
   { label: 'Contact Name', value: 'contactName' },
   { label: 'City', value: 'city' },

@@ -44,6 +44,7 @@ export const ordersSearchSchema = searchSchema.extend({
   customerId: z.string().optional(),
   shipCity: z.string().optional(),
   shipCountry: z.string().optional(),
-  id: z.number().optional(),
+  take: z.coerce.number().min(1).max(100).default(50), // Default to 50 for orders
+  id: z.coerce.string().optional(),
 });
 export type OrdersSearchParams = z.infer<typeof ordersSearchSchema>;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useSearch } from '@tanstack/react-router';
-import { Search as SearchIcon } from 'lucide-react';
+import { Search as SearchIcon, XIcon } from 'lucide-react';
 import { Input } from '~/components/ui/input';
 import { Button } from '~/components/ui/button';
 import { Label } from '~/components/ui/label';
@@ -46,18 +46,21 @@ export function CountrySearch({ className }: CountrySearchProps) {
             placeholder="Enter country name..."
             value={country}
             onChange={(e) => setCountry(e.target.value)}
-            className="pr-10"
+            className="pr-10 relative"
           />
-          <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          {currentCountry && country && (
+            <Button
+              variant="ghost"
+              onClick={handleClear}
+              className="absolute right-0.5 top-0.5 size-8"
+            >
+              <XIcon />
+            </Button>
+          )}
         </div>
         <Button type="submit" variant="default">
-          Search
+          <SearchIcon /> Search
         </Button>
-        {currentCountry && (
-          <Button type="button" variant="outline" onClick={handleClear}>
-            Clear
-          </Button>
-        )}
       </div>
     </form>
   );
