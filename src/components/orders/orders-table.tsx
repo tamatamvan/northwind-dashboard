@@ -205,7 +205,16 @@ export function OrdersTable({
           </div>
         );
       },
-      cell: ({ row }) => <div>{row.original.shipCity}</div>,
+      cell: ({ row }) => (
+        <Link
+          className="text-blue-600 hover:underline"
+          to="/orders"
+          search={{ shipCity: row.original.shipCity }}
+          title={`Filter orders by country: ${row.original.shipCity}`}
+        >
+          {row.original.shipCity}
+        </Link>
+      ),
     },
     {
       accessorKey: 'shipCountry',
@@ -226,7 +235,16 @@ export function OrdersTable({
           </div>
         );
       },
-      cell: ({ row }) => <div>{row.original.shipCountry}</div>,
+      cell: ({ row }) => (
+        <Link
+          className="text-blue-600 hover:underline"
+          to="/orders"
+          search={{ shipCountry: row.original.shipCountry }}
+          title={`Filter orders by country: ${row.original.shipCountry}`}
+        >
+          {row.original.shipCountry}
+        </Link>
+      ),
     },
   ];
 

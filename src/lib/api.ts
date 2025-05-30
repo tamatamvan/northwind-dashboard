@@ -70,21 +70,41 @@ export type FetchOrdersParams = {
   take?: number; // Number of orders to fetch per page
   orderBy?: string; // Optional field to order by
   orderByDesc?: string; // Optional field to order by descending
+  customerId?: string; // Optional filter by customer ID
+  shipCity?: string; // Optional filter by shipping city
+  shipCountry?: string; // Optional filter by shipping country
+  id?: string;
 };
 
 export const fetchOrders = async ({
   page = 1,
   take = 10,
+  customerId,
+  shipCity,
+  shipCountry,
   orderBy,
   orderByDesc,
+  id,
 }: FetchOrdersParams) => {
   // Fetch all orders with pagination
   const queryOrders = new QueryOrders({
     take,
     skip: page ? (page - 1) * take : 0, // Calculate offset based on page
     include: 'total', // Include total count in the response
+    fields: 'id,customerId,shipCity,shippedDate,shipCountry,freight,orderDate', // Specify fields to include in the response
   });
-
+  if (id) {
+    queryOrders.id = id; // Filter orders by specific order ID
+  }
+  if (customerId) {
+    queryOrders.customerId = customerId; // Filter orders by customer ID
+  }
+  if (shipCity) {
+    queryOrders.shipCity = shipCity; // Filter orders by shipping city
+  }
+  if (shipCountry) {
+    queryOrders.shipCountry = shipCountry; // Filter orders by shipping country
+  }
   if (orderBy) {
     queryOrders.orderBy = orderBy; // Set the field to order by
   }
@@ -92,7 +112,7 @@ export const fetchOrders = async ({
     queryOrders.orderByDesc = orderByDesc; // Set the field to order by descending
   }
 
-  const orders = await client.api(queryOrders);
+  const orders = await client.api(queryOrders, {});
   if (orders.succeeded) {
     return orders.response;
   }

@@ -39,3 +39,11 @@ export const customersSearchSchema = searchSchema.extend({
   country: z.string().optional(),
 });
 export type CustomersSearchParams = z.infer<typeof customersSearchSchema>;
+
+export const ordersSearchSchema = searchSchema.extend({
+  customerId: z.string().optional(),
+  shipCity: z.string().optional(),
+  shipCountry: z.string().optional(),
+  id: z.number().optional(),
+});
+export type OrdersSearchParams = z.infer<typeof ordersSearchSchema>;

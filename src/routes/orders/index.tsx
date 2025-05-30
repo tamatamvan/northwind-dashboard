@@ -3,23 +3,27 @@ import { OrdersTable } from '~/components/orders/orders-table';
 import { Pagination } from '~/components/pagination';
 import type { FetchOrdersParams } from '~/lib/api';
 import { fetchOrders } from '~/lib/api';
-import { searchSchema } from '~/lib/utils';
+import { ordersSearchSchema } from '~/lib/utils';
 
 export const Route = createFileRoute('/orders/')({
   component: RouteComponent,
   errorComponent: () => <div>Error loading orders</div>,
   loaderDeps: (opts) => {
-    const parsed = searchSchema.parse(opts.search);
+    const parsed = ordersSearchSchema.parse(opts.search);
     return {
       page: parsed.page,
       take: parsed.take,
       orderBy: parsed.orderBy,
       orderByDesc: parsed.orderByDesc,
+      customerId: parsed.customerId,
+      shipCity: parsed.shipCity,
+      shipCountry: parsed.shipCountry,
+      id: parsed.id,
     };
   },
   loader: async ({ deps }) => fetchOrders(deps as FetchOrdersParams),
   validateSearch: (search) =>
-    searchSchema.parse({ ...search, take: search.take || 50 }),
+    ordersSearchSchema.parse({ ...search, take: search.take || 50 }),
 });
 
 function RouteComponent() {

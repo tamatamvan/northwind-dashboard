@@ -433,6 +433,10 @@ export class QueryOrders
   implements IReturn<QueryResponse<Order>>
 {
   public freight?: number;
+  shipCity!: string;
+  customerId!: string;
+  shipCountry!: string;
+  id: any;
 
   public constructor(init?: Partial<QueryOrders>) {
     super(init);
