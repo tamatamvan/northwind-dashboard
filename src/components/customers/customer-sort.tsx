@@ -46,7 +46,7 @@ export function CustomerSort({ className }: CustomerSortProps) {
   return (
     <div className={className}>
       <Popover>
-        <PopoverTrigger asChild>
+        <PopoverTrigger className="w-full md:w-fit" asChild>
           <Button variant="outline" className="flex items-center gap-2">
             <ArrowUpDown className="h-4 w-4" />
             <span>
