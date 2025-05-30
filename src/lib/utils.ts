@@ -33,3 +33,9 @@ export const searchSchema = z.object({
   orderByDesc: z.string().optional(),
 });
 export type SearchParams = z.infer<typeof searchSchema>;
+
+// Customer specific search schema that extends the base search schema
+export const customersSearchSchema = searchSchema.extend({
+  country: z.string().optional(),
+});
+export type CustomersSearchParams = z.infer<typeof customersSearchSchema>;

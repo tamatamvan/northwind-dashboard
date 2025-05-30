@@ -13,16 +13,22 @@ const client = new JsonServiceClient(
 export type FetchCustomersParams = {
   page?: number; // Page number for pagination
   take?: number; // Number of customers to fetch per page
+  country?: string; // Optional filter by country
 };
 
 export const fetchCustomers = async ({
   page = 1,
   take = 10,
+  country,
 }: FetchCustomersParams) => {
   const queryCustomers = new QueryCustomers({});
   queryCustomers.take = take; // Limit the number of customers fetched
   queryCustomers.skip = page ? (page - 1) * take : 0; // Calculate offset based on page
   queryCustomers.include = 'total';
+
+  if (country) {
+    queryCustomers.countryStartsWith = country; // Filter customers by country
+  }
 
   const customers = await client.api(queryCustomers);
 
