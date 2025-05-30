@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 
 import { CustomerCard } from '~/components/customers/customer-card';
 import { CountrySearch } from '~/components/customers/country-search';
+import { CustomerSort } from '~/components/customers/customer-sort';
 import { Pagination } from '~/components/pagination';
 
 import { fetchCustomers } from '~/lib/api';
@@ -15,6 +16,8 @@ export const Route = createFileRoute('/customers/')({
       page: parsed.page,
       take: parsed.take,
       country: parsed.country,
+      orderBy: parsed.orderBy,
+      orderByDesc: parsed.orderByDesc,
     };
   },
   loader: async ({ deps }) => fetchCustomers(deps),
@@ -39,8 +42,9 @@ function Customers() {
     <div>
       <h2 className="text-2xl font-bold mb-4">Customers List</h2>
 
-      <div className="mb-6">
+      <div className="flex flex-col md:flex-row gap-4 mb-6 md:justify-end">
         <CountrySearch className="max-w-md" />
+        <CustomerSort />
       </div>
 
       {country && customers && customers.total > 0 && (

@@ -14,12 +14,16 @@ export type FetchCustomersParams = {
   page?: number; // Page number for pagination
   take?: number; // Number of customers to fetch per page
   country?: string; // Optional filter by country
+  orderBy?: string; // Optional field to order by ascending
+  orderByDesc?: string; // Optional field to order by descending
 };
 
 export const fetchCustomers = async ({
   page = 1,
   take = 10,
   country,
+  orderBy,
+  orderByDesc,
 }: FetchCustomersParams) => {
   const queryCustomers = new QueryCustomers({});
   queryCustomers.take = take; // Limit the number of customers fetched
@@ -28,6 +32,14 @@ export const fetchCustomers = async ({
 
   if (country) {
     queryCustomers.countryStartsWith = country; // Filter customers by country
+  }
+
+  if (orderBy) {
+    queryCustomers.orderBy = orderBy; // Sort in ascending order
+  }
+
+  if (orderByDesc) {
+    queryCustomers.orderByDesc = orderByDesc; // Sort in descending order
   }
 
   const customers = await client.api(queryCustomers);

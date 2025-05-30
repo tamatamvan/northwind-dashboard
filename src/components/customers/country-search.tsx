@@ -35,7 +35,7 @@ export function CountrySearch({ className }: CountrySearchProps) {
   return (
     <form
       onSubmit={handleSearch}
-      className={`flex flex-col space-y-2 ${className}`}
+      className={`flex flex-col space-y-2 md:flex-row md:gap-2 md:items-center ${className}`}
     >
       <Label htmlFor="country-search">Filter by Country</Label>
       <div className="flex gap-2">
