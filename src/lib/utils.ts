@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
+import { format } from 'date-fns/format';
 import { twMerge } from 'tailwind-merge';
 import { z } from 'zod';
 
@@ -17,6 +18,12 @@ export function parseMicrosoftDate(msDateString: string): Date {
   const date = new Date(millis);
 
   return date;
+}
+
+export function formatDate(dateString: string | null): string {
+  if (!dateString) return 'N/A';
+  const date = parseMicrosoftDate(dateString);
+  return format(date, 'MM/dd/yyyy');
 }
 
 export const searchSchema = z.object({

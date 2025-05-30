@@ -1,5 +1,10 @@
 import { JsonServiceClient } from '@servicestack/client';
-import { GetCustomerDetails, QueryCustomers, QueryOrders } from '~/dtos';
+import {
+  GetCustomerDetails,
+  GetOrders,
+  QueryCustomers,
+  QueryOrders,
+} from '~/dtos';
 
 const client = new JsonServiceClient(
   import.meta.env.VITE_BASE_API_URL || '/api'
@@ -70,6 +75,26 @@ export const fetchOrders = async ({
     return orders.response;
   }
   throw new Error(orders.errorMessage || 'Failed to fetch orders');
+};
+
+export const fetchOrderDetails = async ({
+  customerId,
+  orderId,
+}: {
+  customerId: string;
+  orderId: string;
+}) => {
+  const getOrdersDetails = new GetOrders({});
+  getOrdersDetails.customerId = customerId;
+
+  const orderDetails = await client.api(getOrdersDetails);
+
+  if (orderDetails.succeeded) {
+    return orderDetails.response?.results?.find(
+      (result) => result.order.id === parseInt(orderId)
+    );
+  }
+  throw new Error(orderDetails.errorMessage || 'Failed to fetch order details');
 };
 
 export { client };

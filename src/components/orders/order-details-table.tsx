@@ -6,8 +6,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Link } from '@tanstack/react-router';
-
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 
 import {
@@ -18,20 +16,19 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui/table';
-import { formatDate } from '~/lib/utils';
-import { Order } from '~/dtos';
+import { OrderDetail } from '~/dtos';
 
-interface OrdersTableProps {
-  data: Array<Order>;
+interface OrderDetailsTableProps {
+  data: OrderDetail[];
   isLoading?: boolean;
   onSortingChange?: (sorting: SortingState) => void;
 }
 
-export function OrdersTable({
+export function OrderDetailsTable({
   data,
-  onSortingChange,
   isLoading = false,
-}: OrdersTableProps) {
+  onSortingChange,
+}: OrderDetailsTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const handleSorting = (
@@ -46,17 +43,17 @@ export function OrdersTable({
     setSorting(newSorting);
   };
 
-  // Define sortable columns
-  const columns: ColumnDef<Order>[] = [
+  // Define columns for OrderDetail
+  const columns: ColumnDef<OrderDetail>[] = [
     {
-      accessorKey: 'id',
+      accessorKey: 'productId',
       header: ({ column }) => {
         return (
           <div
             className="flex items-center cursor-pointer"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Order ID
+            Product ID
             {column.getIsSorted() === 'asc' ? (
               <ArrowUp className="ml-2 h-4 w-4" />
             ) : column.getIsSorted() === 'desc' ? (
@@ -67,29 +64,16 @@ export function OrdersTable({
           </div>
         );
       },
-      cell: ({ row }) => (
-        <Link
-          to="/orders/$customerId/$orderId"
-          params={{
-            customerId: row.original.customerId,
-            orderId: row.original.id.toString(),
-          }}
-          className="text-blue-600 hover:underline"
-          title={`View details for order ${row.original.id}`}
-        >
-          {row.original.id}
-        </Link>
-      ),
     },
     {
-      accessorKey: 'customerId',
+      accessorKey: 'unitPrice',
       header: ({ column }) => {
         return (
           <div
             className="flex items-center cursor-pointer"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Customer ID
+            Unit Price
             {column.getIsSorted() === 'asc' ? (
               <ArrowUp className="ml-2 h-4 w-4" />
             ) : column.getIsSorted() === 'desc' ? (
@@ -100,28 +84,17 @@ export function OrdersTable({
           </div>
         );
       },
-      cell: ({ row }) => (
-        <div>
-          <Link
-            to="/customers/$customerId"
-            params={{ customerId: row.original.customerId }}
-            className="text-blue-600 hover:underline"
-            title={`View details for customer ${row.original.customerId}`}
-          >
-            {row.original.customerId}
-          </Link>
-        </div>
-      ),
+      cell: ({ row }) => <div>${row.original.unitPrice.toFixed(2)}</div>,
     },
     {
-      accessorKey: 'orderDate',
+      accessorKey: 'quantity',
       header: ({ column }) => {
         return (
           <div
             className="flex items-center cursor-pointer"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Order Date
+            Quantity
             {column.getIsSorted() === 'asc' ? (
               <ArrowUp className="ml-2 h-4 w-4" />
             ) : column.getIsSorted() === 'desc' ? (
@@ -132,21 +105,16 @@ export function OrdersTable({
           </div>
         );
       },
-      cell: ({ row }) => (
-        <div>
-          {row.original.orderDate ? formatDate(row.original.orderDate) : 'N/A'}
-        </div>
-      ),
     },
     {
-      accessorKey: 'shippedDate',
+      accessorKey: 'discount',
       header: ({ column }) => {
         return (
           <div
             className="flex items-center cursor-pointer"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Shipped Date
+            Discount
             {column.getIsSorted() === 'asc' ? (
               <ArrowUp className="ml-2 h-4 w-4" />
             ) : column.getIsSorted() === 'desc' ? (
@@ -157,23 +125,17 @@ export function OrdersTable({
           </div>
         );
       },
-      cell: ({ row }) => (
-        <div>
-          {row.original.shippedDate
-            ? formatDate(row.original.shippedDate)
-            : 'Pending'}
-        </div>
-      ),
+      cell: ({ row }) => <div>{(row.original.discount * 100).toFixed(0)}%</div>,
     },
     {
-      accessorKey: 'freight',
+      id: 'total',
       header: ({ column }) => {
         return (
           <div
             className="flex items-center cursor-pointer"
             onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
           >
-            Freight
+            Line Total
             {column.getIsSorted() === 'asc' ? (
               <ArrowUp className="ml-2 h-4 w-4" />
             ) : column.getIsSorted() === 'desc' ? (
@@ -184,49 +146,14 @@ export function OrdersTable({
           </div>
         );
       },
-      cell: ({ row }) => <div>${row.original.freight.toFixed(2)}</div>,
-    },
-    {
-      accessorKey: 'shipCity',
-      header: ({ column }) => {
-        return (
-          <div
-            className="flex items-center cursor-pointer"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Ship City
-            {column.getIsSorted() === 'asc' ? (
-              <ArrowUp className="ml-2 h-4 w-4" />
-            ) : column.getIsSorted() === 'desc' ? (
-              <ArrowDown className="ml-2 h-4 w-4" />
-            ) : (
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            )}
-          </div>
-        );
+      accessorFn: (row) => {
+        // Calculate line total: unitPrice * quantity * (1 - discount)
+        return row.unitPrice * row.quantity * (1 - row.discount);
       },
-      cell: ({ row }) => <div>{row.original.shipCity}</div>,
-    },
-    {
-      accessorKey: 'shipCountry',
-      header: ({ column }) => {
-        return (
-          <div
-            className="flex items-center cursor-pointer"
-            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-          >
-            Ship Country
-            {column.getIsSorted() === 'asc' ? (
-              <ArrowUp className="ml-2 h-4 w-4" />
-            ) : column.getIsSorted() === 'desc' ? (
-              <ArrowDown className="ml-2 h-4 w-4" />
-            ) : (
-              <ArrowUpDown className="ml-2 h-4 w-4" />
-            )}
-          </div>
-        );
+      cell: ({ getValue }) => {
+        const total = getValue<number>();
+        return <div>${total.toFixed(2)}</div>;
       },
-      cell: ({ row }) => <div>{row.original.shipCountry}</div>,
     },
   ];
 
@@ -245,11 +172,11 @@ export function OrdersTable({
     <div className="w-full">
       {isLoading ? (
         <div className="flex items-center justify-center py-8">
-          Loading orders...
+          Loading order details...
         </div>
       ) : data.length === 0 ? (
         <div className="flex items-center justify-center py-8">
-          No orders found
+          No order details found
         </div>
       ) : (
         <Table>

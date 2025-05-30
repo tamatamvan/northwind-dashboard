@@ -1,5 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useRouterState } from '@tanstack/react-router';
 import { OrdersTable } from '~/components/orders/orders-table';
+import { Pagination } from '~/components/pagination';
 import type { FetchOrdersParams } from '~/lib/api';
 import { fetchOrders } from '~/lib/api';
 import { searchSchema } from '~/lib/utils';
@@ -23,7 +24,13 @@ export const Route = createFileRoute('/orders/')({
 
 function RouteComponent() {
   const orders = Route.useLoaderData();
+
+  const { page, take } = Route.useLoaderDeps();
+  const pageSize = take ?? 50;
+  const pageNumber = page ?? 1;
+
   const navigate = Route.useNavigate();
+  const { isLoading } = useRouterState();
 
   const onSortingChange = (newSorting: { id: string; desc: boolean }[]) => {
     const orderBy = newSorting.filter((s) => !s.desc)[0]?.id || '';
@@ -35,14 +42,35 @@ function RouteComponent() {
       },
     });
   };
+  const onPageChange = (newPage: number) => {
+    navigate({ search: { page: newPage, take: pageSize } });
+  };
+
   if (!orders?.results) {
     return <div>No orders found.</div>;
   }
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto">
       <h1 className="text-2xl font-bold mb-6">Orders</h1>
+      <div className="mb-4">
+        <p className="text-gray-600">
+          Total Orders: <strong>{orders.total}</strong>
+        </p>
+      </div>
+      <div className="mb-4">
+        <OrdersTable
+          data={orders?.results}
+          onSortingChange={onSortingChange}
+          isLoading={isLoading}
+        />
+      </div>
 
-      <OrdersTable data={orders?.results} onSortingChange={onSortingChange} />
+      <Pagination
+        page={pageNumber}
+        totalCount={orders.total}
+        pageSize={pageSize}
+        onPageChange={onPageChange}
+      />
     </div>
   );
 }
