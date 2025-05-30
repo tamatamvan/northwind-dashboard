@@ -40,11 +40,11 @@ This project was built using the following React + TypeScript + Vite template
 
 Other than the mentioned template above, this project also uses:
 
-- [TanStack Router]('https://tanstack.com/router/latest') for client-side routing
-- [TanStack Query]('https://tanstack.com/query/latest') for async state management
-- [shadcn/ui]('https://ui.shadcn.com/') to build using accessible UI components
-- [zod]('https://zod.dev') for schema validation
-- [@servicestack/client]('https://docs.servicestack.net/typescript-server-events-client') for fetching data from the provided api service.
+- [TanStack Router](https://tanstack.com/router/latest) for client-side routing
+- [TanStack Query](https://tanstack.com/query/latest) for async state management
+- [shadcn/ui](https://ui.shadcn.com/) to build using accessible UI components
+- [zod](https://zod.dev) for schema validation
+- [@servicestack/client](https://docs.servicestack.net/typescript-server-events-client) for fetching data from the provided api service.
 
 ## Expanding the ESLint configuration
 
