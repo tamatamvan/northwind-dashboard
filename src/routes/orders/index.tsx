@@ -44,14 +44,19 @@ function RouteComponent() {
     const orderBy = newSorting.filter((s) => !s.desc)[0]?.id || '';
     const orderByDesc = newSorting.filter((s) => s.desc)[0]?.id || '';
     navigate({
-      search: {
+      search: (prev) => ({
+        ...prev,
         orderBy: orderBy || undefined,
         orderByDesc: orderByDesc || undefined,
-      },
+        page: 1, // Reset to first page when sorting changes
+      }),
+      replace: true,
     });
   };
   const onPageChange = (newPage: number) => {
-    navigate({ search: { page: newPage, take: pageSize } });
+    navigate({
+      search: (prev) => ({ ...prev, page: newPage, take: pageSize }),
+    });
   };
 
   if (!orders?.results) {

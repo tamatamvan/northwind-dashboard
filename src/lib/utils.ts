@@ -36,6 +36,11 @@ export type SearchParams = z.infer<typeof searchSchema>;
 
 // Customer specific search schema that extends the base search schema
 export const customersSearchSchema = searchSchema.extend({
+  id: z.string().optional(),
+  companyName: z.string().optional(),
+  contactName: z.string().optional(),
+  contactTitle: z.string().optional(),
+  city: z.string().optional(),
   country: z.string().optional(),
 });
 export type CustomersSearchParams = z.infer<typeof customersSearchSchema>;

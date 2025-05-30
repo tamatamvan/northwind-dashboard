@@ -13,6 +13,11 @@ const client = new JsonServiceClient(
 export type FetchCustomersParams = {
   page?: number; // Page number for pagination
   take?: number; // Number of customers to fetch per page
+  id?: string; // Optional filter by customer ID
+  companyName?: string; // Optional filter by company name
+  contactName?: string; // Optional filter by contact name
+  contactTitle?: string; // Optional filter by contact title
+  city?: string; // Optional filter by city
   country?: string; // Optional filter by country
   orderBy?: string; // Optional field to order by ascending
   orderByDesc?: string; // Optional field to order by descending
@@ -21,6 +26,11 @@ export type FetchCustomersParams = {
 export const fetchCustomers = async ({
   page = 1,
   take = 10,
+  id,
+  companyName,
+  contactName,
+  contactTitle,
+  city,
   country,
   orderBy,
   orderByDesc,
@@ -30,6 +40,31 @@ export const fetchCustomers = async ({
     take: take,
     skip: page ? (page - 1) * take : 0, // Calculate offset based on page
   });
+
+  // Add search filters if they exist
+  if (id) {
+    queryCustomers.ids = [id]; // Filter by specific customer ID
+  }
+
+  // Note: The current backend API only supports filtering by id and country directly
+  // We're adding the other parameters as custom properties, but the backend
+  // would need to be extended to handle these properly
+
+  if (companyName) {
+    queryCustomers.companyName = companyName;
+  }
+
+  if (contactName) {
+    queryCustomers.contactName = contactName;
+  }
+
+  if (contactTitle) {
+    queryCustomers.contactTitle = contactTitle;
+  }
+
+  if (city) {
+    queryCustomers.city = city;
+  }
 
   if (country) {
     queryCustomers.countryStartsWith = country; // Filter customers by country

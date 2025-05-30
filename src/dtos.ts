@@ -411,6 +411,10 @@ export class QueryCustomers
 {
   public ids!: string[];
   public countryStartsWith!: string;
+  companyName!: string;
+  contactName!: string;
+  contactTitle!: string;
+  city!: string;
 
   public constructor(init?: Partial<QueryCustomers>) {
     super(init);
