@@ -22,14 +22,13 @@ export function OrdersSearch() {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('ID ==> ', id);
     navigate({
       search: (prev) => ({
         ...prev,
-        id: id || undefined,
-        customerId: customerId || undefined,
-        shipCity: shipCity || undefined,
-        shipCountry: shipCountry || undefined,
+        id: id.trim() || undefined,
+        customerId: customerId.trim() || undefined,
+        shipCity: shipCity.trim() || undefined,
+        shipCountry: shipCountry.trim() || undefined,
         page: 1, // Reset to first page when search changes
       }),
       replace: true,

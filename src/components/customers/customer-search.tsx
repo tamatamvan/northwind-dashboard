@@ -29,12 +29,12 @@ export function CustomerSearch() {
     navigate({
       search: (prev) => ({
         ...prev,
-        id: id || undefined,
-        companyName: companyName || undefined,
-        contactName: contactName || undefined,
-        contactTitle: contactTitle || undefined,
-        city: city || undefined,
-        country: country || undefined,
+        id: id.trim() || undefined,
+        companyName: companyName.trim() || undefined,
+        contactName: contactName.trim() || undefined,
+        contactTitle: contactTitle.trim() || undefined,
+        city: city.trim() || undefined,
+        country: country.trim() || undefined,
         page: 1, // Reset to first page when search changes
       }),
       replace: true,
