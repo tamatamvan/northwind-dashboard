@@ -51,7 +51,7 @@ function RouteComponent() {
 
       <div className="flex flex-col gap-4 w-ful">
         <h3 className="text-xl font-bold">Orders</h3>
-        {customerOrders?.length === 0 ? (
+        {!customerOrders || customerOrders?.length === 0 ? (
           <div className="text-gray-500">
             No orders found for this customer.
           </div>
